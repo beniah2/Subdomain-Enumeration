@@ -43,24 +43,63 @@ Start with port-limited checks, for example test only 80 and 443 to avoid overlo
 
 
 
+## Subdomain Enumeration using Sublist3r
+
+# Project goal
+Map a client domain for subdomains with Sublist3r, then show how to reduce risk. You document findings and give clear fixes.
+
+Story, step by step
+1. Prep the lab
+ Clone the repo and install requirements.
+
+ Command: git clone https://github.com/aboul3la/Sublist3r.git
 
 
+<img width="664" height="304" alt="image" src="https://github.com/user-attachments/assets/2bc5ac50-b7c9-4851-ad8e-7bd71afd9dfa" />
+
+2. Quick passive sweep
+Run passive first to avoid extra DNS traffic.
+
+## Command:
+
+sublist3r -d yoursite.com -o passive.txt
+
+Passive results give known candidates from public sources.
+
+Example result: passive.txt lists 12 candidates
+
+<img width="1110" height="826" alt="image" src="https://github.com/user-attachments/assets/1312b09f-10fd-442c-8b24-4fc9e2b43101" />
+
+# Active enumeration, controlled pace
+
+Increase scope slowly. Test a few ports only.
+
+sublist3r -d yoursite.com -o active.txt
+
+<img width="957" height="690" alt="image" src="https://github.com/user-attachments/assets/0b455977-9826-4f07-b719-43098062888f" />
 
 
+## Remediation steps, prioritized
 
+1. Prevent DNS zone transfers
+2. Close exposed panels-move admin interfaces behind VPN or IP allow list, not public internet.
+3. Prevent CNAME takeovers-remove records pointing to third party services you no longer use.
+4. Enforce access control- enable MFA on DNS and cloud accounts, rotate keys monthly.
+5. Add monitoring and automation-run this scan weekly and alert on new resolves or new CT entries.
 
+## Practical commands you can paste
 
+1. Quick passive run:
 
+sublist3r -d yoursite.com -o passive.txt
 
+2. Active run:
 
+sublist3r -d yoursite.com -o active.txt
 
+3. Brute run with wordlist:
 
-
-
-
-
-
-Subdomain Enumeration using Sublist3r
+sublist3r -d yoursite.com -b -w /path/to/wordlist.txt -o brute.txt
 
 
 
